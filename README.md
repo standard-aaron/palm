@@ -1,4 +1,4 @@
 # palm
-Polygenic Adaptation Likelihood Method (PALM/J-PALM)
+Polygenic Adaptation Likelihood Method (PALM) / Joint PALM (J-PALM)
 
-See Wiki for documentation
+See Wiki for documentation: https://github.com/35ajstern/palm/wiki
