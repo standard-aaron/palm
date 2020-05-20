@@ -10,6 +10,46 @@ import sys
 from numba import njit
 
 from palm_utils.deterministic_utils import log_l_importance_sampler 
+import gzip
+
+def parse_clues(filename):
+    with gzip.open(filename, 'rb') as fp:
+        try:
+            #parse file
+            data = fp.read()
+        except OSError:
+            with open(filename, 'rb') as fp:
+                try:
+                    #parse file
+                    data = fp.read()
+                except OSError:
+                    print('Error: Unable to open ' + filename)
+                    exit(1)
+
+        #get #mutations and #sampled trees per mutation
+        filepos = 0
+        num_muts, num_sampled_trees_per_mut = np.frombuffer(data[slice(filepos, filepos+8, 1)], dtype = np.int32)
+        #print(num_muts, num_sampled_trees_per_mut)
+
+        filepos += 8
+        #iterate over mutations
+        for m in range(0,num_muts):
+            if m > 0:
+               print("Warning: multiple mutations.")
+            bp, daf, n = np.frombuffer(data[slice(filepos, filepos+12, 1)], dtype = np.int32)
+            filepos   += 12
+            #print("BP: %d, DAF: %d, n: %d" % (bp, daf, n))
+
+            num_anctimes = 4*(n-daf-1)*num_sampled_trees_per_mut
+            anctimes     = np.reshape(np.frombuffer(data[slice(filepos, filepos+num_anctimes, 1)], dtype = np.float32), (num_sampled_trees_per_mut, n-daf-1))
+            filepos     += num_anctimes
+            
+
+            num_dertimes = 4*(daf-1)*num_sampled_trees_per_mut
+            dertimes     = np.reshape(np.frombuffer(data[slice(filepos, filepos+num_dertimes, 1)], dtype = np.float32), (num_sampled_trees_per_mut, daf-1))
+            filepos     += num_dertimes
+          
+    return dertimes,anctimes 
 
 def _args(super_parser,main=False):
 	if not main:
@@ -42,8 +82,8 @@ def _args(super_parser,main=False):
 	return parser
 
 def _parse_locus_stats(args):
-	locusDerTimes = np.load(args.times+'.der.npy')
-	locusAncTimes = np.load(args.times+'.anc.npy')	
+	locusDerTimes,locusAncTimes = parse_clues(args.times+'.palm')        
+
 	if locusDerTimes.ndim == 0 or locusAncTimes.ndim == 0:
 		raise ValueError	
 	elif locusAncTimes.ndim == 1 and locusDerTimes.ndim == 1:
