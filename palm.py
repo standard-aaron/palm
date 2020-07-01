@@ -46,6 +46,10 @@ def _parse_loci_stats(args):
 		betaColumns = ['beta']
 		pColumns = ['pval']
 		seColumns = ['se']
+		if not args.quiet:
+			print()
+			print('Analyzing trait...')
+		traitNames = ['']
 	else:
 		pStr = 'pval@'	
 		seStr = 'se@'
@@ -53,10 +57,10 @@ def _parse_loci_stats(args):
 		betaColumns = [col for col in df.columns if np.any([betaStr+trait in col for trait in (args.traits).split(',')])]
 		pColumns = [col for col in df.columns if np.any([pStr+trait in col for trait in (args.traits).split(',')])]
 		seColumns = [col for col in df.columns if np.any([seStr+trait in col for trait in (args.traits).split(',')])]
-	traitNames = [col[len(betaStr):] for col in betaColumns]
-	if not args.quiet:
-		print()
-		print('Analyzing traits: %s'%(', '.join(traitNames)))
+		traitNames = [col[len(betaStr):] for col in betaColumns]
+		if not args.quiet:
+			print()
+			print('Analyzing traits: %s'%(', '.join(traitNames)))
 
 	dfFiltered = df
 	idxs = dfFiltered.index.values
