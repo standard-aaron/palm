@@ -192,19 +192,15 @@ def _inference(statistics,args):
 	J = len(omega)
 	L_byTrait,L = _nloci(statistics,args)
 	print('Analyzing %d loci...'%(L))
-	if args.bootstrap:
-		B = args.B
-	else:
-		B = L
+	B = args.B
+	
 	omegaJK = np.zeros((J,B))
 	for b in range(B):	
 		statsDK = _bootstrap(statistics) 
 		omegaJK_b = _opt_omega(statsDK)	
 		omegaJK[:,b] = omegaJK_b 
-	if args.bootstrap:
-		ses = np.std(omegaJK,axis=1)
-	else:
-		ses = np.sqrt(L)*np.std(omegaJK,axis=1)
+	ses = np.std(omegaJK,axis=1)
+	
 	return omega,ses
 
 def _T_inference(statistics,args):
