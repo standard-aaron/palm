@@ -28,7 +28,6 @@ def _args(super_parser,main=False):
 	parser.add_argument('--B',type=int,default=250)
 	#advanced options
 	parser.add_argument('--maxp',type=float,default=1)
-	parser.add_argument('--minmaf',type=float,default=0.005)
 	parser.add_argument('--seed',default=None,type=int)
 	return parser
 
@@ -104,9 +103,6 @@ def _parse_loci_stats(args):
 				continue	
 			if np.logical_not(np.any(stats.chi2.sf((np.array(loc_betas)/np.array(loc_ses))**2,df=1) < args.maxp)):
 				continue
-				
-		if MAF < args.minmaf:
-			continue 
 
 		try:	
 			if args.quad != None:
