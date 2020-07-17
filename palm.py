@@ -87,7 +87,6 @@ def _parse_loci_stats(args):
 		
 		derived_allele = dfRow.derived_allele
 
-		MAF = float(dfRow.minor_AF)
 		if derived_allele != alt:
 			flipper = -1.0
 		else:
