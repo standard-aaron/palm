@@ -85,7 +85,6 @@ def _parse_loci_stats(args):
 		
 		locusDir = args.traitDir+'ld_%d/'%(ld_block)	
 		
-		minor_allele = dfRow.minor_allele
 		derived_allele = dfRow.derived_allele
 
 		MAF = float(dfRow.minor_AF)
