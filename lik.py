@@ -84,7 +84,7 @@ def _args(super_parser,main=False):
 	return parser
 
 def _parse_locus_stats(args):
-	locusDerTimes,locusAncTimes = parse_clues(args.times+'.palm')        
+	locusDerTimes,locusAncTimes = parse_clues(args.times+'.timeb')        
 
 	if locusDerTimes.ndim == 0 or locusAncTimes.ndim == 0:
 		raise ValueError	
