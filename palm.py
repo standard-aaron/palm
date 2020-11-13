@@ -233,8 +233,6 @@ def _T_inference(statistics,args):
 			msig = pvals[:,j] < args.maxp
 			mcoeffs = coeffs[msig,:]
 			mbetas = np.reshape(betas[msig,j],(Lj,1))
-			mses = np.reshape(ses[msig,j],(Lj,1))
-			mx0 = x0[msig]
 			mmults = mults[msig]
 			mpvals = np.reshape(pvals[msig,j],(Lj,1))
 			mtraitNames = [traitNames[j]]	
